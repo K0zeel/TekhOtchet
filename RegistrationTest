@@ -1,0 +1,54 @@
+package com.example.umvdapp
+
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.*
+import com.example.umvdapp.screens.RegistrationScreen
+import org.junit.Rule
+import org.junit.Test
+
+class RegistrationTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Test
+    fun registrationScreen_displaysAndHandlesInput() {
+        var okClickedCount = 0
+
+        composeTestRule.setContent {
+            RegistrationScreen(onOkClick={ okClickedCount++ })
+        }
+
+        // Проверка отображения заголовка
+        composeTestRule.onNodeWithText("Регистрация").assertIsDisplayed()
+
+        // Ввод данных в поля по тегам и проверка содержимого
+        val loginInput="myLogin"
+        val passwordInput="mypassword"
+        val checkPasswordInput="mypassword"
+        val phoneInput="1234567890"
+        val emailInput="test@example.com"
+        val ageInput="30"
+
+        composeTestRule.onNodeWithTag("loginField")
+            .performTextInput(loginInput)
+
+        composeTestRule.onNodeWithTag("passwordField")
+            .performTextInput(passwordInput)
+
+        composeTestRule.onNodeWithTag("checkPasswordField")
+            .performTextInput(checkPasswordInput)
+
+        composeTestRule.onNodeWithTag("phoneField")
+            .performTextInput(phoneInput)
+
+        composeTestRule.onNodeWithTag("emailField")
+            .performTextInput(emailInput)
+
+        composeTestRule.onNodeWithTag("ageField")
+            .performTextInput(ageInput)
+
+        composeTestRule.onNodeWithText("Зарегистрироваться").performClick()
+
+        assert(okClickedCount == 1)
+    }
+}
