@@ -1,0 +1,46 @@
+package com.example.umvdapp
+
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.example.umvdapp.screens.AuthorizationScreen
+import org.junit.Rule
+import org.junit.Test
+
+class AuthorizationTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Test
+    fun authorizationScreen_displaysCorrectlyAndHandlesInput() {
+        var authClicked = false
+        var registerClicked = false
+
+        composeTestRule.setContent {
+            AuthorizationScreen(
+                onAuthorizationClick = { authClicked = true },
+                onRegistrationClick = { registerClicked = true }
+            )
+        }
+
+        composeTestRule.onNodeWithText("Авторизация").assertIsDisplayed()
+
+        val loginText = "testUser"
+        composeTestRule.onNodeWithTag("loginField")
+            .performTextInput(loginText)
+
+        composeTestRule.onNodeWithTag("loginField").assertTextEquals(loginText)
+
+        val passwordText = "password123"
+        composeTestRule.onNodeWithTag("passwordField")
+            .performTextInput(passwordText)
+        composeTestRule.onNodeWithTag("passwordField").assertTextEquals(passwordText)
+
+        composeTestRule.onNodeWithText("Войти").performClick()
+        assert(authClicked)
+    }
+}
