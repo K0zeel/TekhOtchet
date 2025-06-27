@@ -1,0 +1,57 @@
+@Composable
+fun ProductPanel(modifier: Modifier = Modifier) {
+    var productName by rememberSaveable { mutableStateOf("") }
+    var productDescription by rememberSaveable { mutableStateOf("") }
+    var productPrice by rememberSaveable { mutableStateOf("") }
+
+    val context = LocalContext.current
+
+    Column(modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Добавление товаров",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(16.dp))
+        TextField(
+            productName,
+            onValueChange = {productName = it},
+            label = { Text("Наименование") }
+        )
+        TextField(
+            productDescription,
+            onValueChange = {productDescription = it},
+            label = { Text("Описание") }
+
+        )
+        TextField(
+            productPrice,
+            onValueChange = {productPrice = it},
+            label = { Text("Цена") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
+        Button(onClick = {
+            if(productName.isBlank() ||
+                productDescription.isBlank() ||
+                productPrice.isBlank()){
+
+                Toast.makeText(context,
+                    "Не все поля заполнены",
+                    Toast.LENGTH_SHORT).show()
+            } else if ((productPrice.toIntOrNull() ?: -1) <= 0){
+                Toast.makeText(context,
+                    "Указано некорректное значение цены",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context,
+                    "Товар успешно добавлен",
+                    Toast.LENGTH_SHORT).show()
+                productName = ""
+                productDescription = ""
+                productPrice = ""
+            }
+        }, modifier = Modifier.padding(16.dp)) {
+            Text("Добавить")
+        }
+    }
+}
